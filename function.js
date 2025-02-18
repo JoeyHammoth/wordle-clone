@@ -3,12 +3,29 @@ const URL_POST_WORD = "https://words.dev-apis.com/validate-word";
 
 let word_arr = [];
 let currRow = 0;
+let hasWon = false;
 
+const debug_row = document.querySelector(".row");
 const debug_word = document.querySelector(".word");
 const boxes = document.querySelectorAll(".grid div");
 const warnText = document.querySelector(".warning");
+const loading = document.querySelector(".load");
+const checkbox = document.querySelector(".debug-mode");
+
+function checkDebug() {
+    if (checkbox.checked) {
+        debug_row.style.display = "block";
+        debug_word.style.display = "block";
+    } else {
+        debug_row.style.display = "none";
+        debug_word.style.display = "none";
+    }
+}
 
 document.addEventListener("keydown", function (event) {
+    if (hasWon) {
+        return;
+    }
     if (event.key == "Backspace") {
         if (currRow == 0 && word_arr.length <= 5 && word_arr.length > 0) {
             word_arr.pop();
@@ -72,7 +89,7 @@ document.addEventListener("keydown", function (event) {
         }
     }
 
-    debug_word.innerText = word_arr;
+    debug_word.innerText = `word_arr: ${word_arr}`
     changeBox();
 })
 
@@ -108,6 +125,7 @@ function getWord() {
 // Post word with the post URL via fetch with post config object.
 // Get the valid word bool from processed promise.
 async function validateWord(word) {
+    loading.style.display = "block"
     const promise = await fetch(URL_POST_WORD, {
         method: "POST",
         body: JSON.stringify({"word": word}) // body is what is sent to the API
@@ -153,16 +171,21 @@ function animateWrong() {
             boxes[i].style.animation = "wrong 1s linear";
         }
     }
+    loading.style.display = "none";
 }
 
 async function correctingWord(word) {
     const promise = await fetch(URL_GET_WORD);
     const processed = await promise.json();
     if (word.toLowerCase() == processed.word) {
-        alert("Congratulations!!!");
-    } else {
-        compareWord(word.toLowerCase(), processed.word);
+        hasWon = true;
+        alert("Congratulations!!! You got it right!");
+    } 
+
+    if (currRow == 5) {
+        alert(`You Loose! The word is ${processed.word}.`);
     }
+    compareWord(word.toLowerCase(), processed.word);
 }
 
 function compareWord(answer, solution) {
@@ -181,4 +204,10 @@ function compareWord(answer, solution) {
         }
     }
     currRow += 1;
+    loading.style.display = "none";
+    debug_row.innerText = `currRow: ${currRow}`;
 }
+
+checkbox.addEventListener("change", function () {
+    checkDebug();
+});
