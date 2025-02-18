@@ -1,8 +1,8 @@
 const URL_GET_WORD = "https://words.dev-apis.com/word-of-the-day";
 const URL_POST_WORD = "https://words.dev-apis.com/validate-word";
 
-var word_arr = [];
-var currRow = 0;
+let word_arr = [];
+let currRow = 0;
 
 const debug_word = document.querySelector(".word");
 const boxes = document.querySelectorAll(".grid div");
@@ -78,6 +78,7 @@ document.addEventListener("keydown", function (event) {
 
 function changeBox() {
     for (let i = 0; i < boxes.length; i++) {
+        boxes[i].style.animation = "";
         if (typeof word_arr[i] != 'undefined') {
             boxes[i].innerText = word_arr[i];
         } else {
@@ -114,8 +115,70 @@ async function validateWord(word) {
     const processed = await promise.json();
     if (processed.validWord) {
         warnText.style.display = "none";
+        correctingWord(word);
     } else {
         warnText.style.display = "block";
+        animateWrong();
     }
 }
 
+function animateWrong() {
+    if (currRow == 0) {
+        for (let i = 0; i < 5; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+    if (currRow == 1) {
+        for (let i = 5; i < 10; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+    if (currRow == 2) {
+        for (let i = 10; i < 15; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+    if (currRow == 3) {
+        for (let i = 15; i < 20; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+    if (currRow == 4) {
+        for (let i = 20; i < 25; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+    if (currRow == 5) {
+        for (let i = 25; i < 30; i++) {
+            boxes[i].style.animation = "wrong 1s linear";
+        }
+    }
+}
+
+async function correctingWord(word) {
+    const promise = await fetch(URL_GET_WORD);
+    const processed = await promise.json();
+    if (word.toLowerCase() == processed.word) {
+        alert("Congratulations!!!");
+    } else {
+        compareWord(word.toLowerCase(), processed.word);
+    }
+}
+
+function compareWord(answer, solution) {
+    const answerArr = answer.split("");
+    const solArr = solution.split("");
+    for (let i = 0; i < 5; i++) {
+        if (answerArr[i] == solArr[i]) {
+            boxes[i + (currRow * 5)].style.color = "white";
+            boxes[i + (currRow * 5)].style.backgroundColor = "green";
+        } else if (solution.includes(answerArr[i])) {
+            boxes[i + (currRow * 5)].style.color = "white";
+            boxes[i + (currRow * 5)].style.backgroundColor = "orange";
+        } else {
+            boxes[i + (currRow * 5)].style.color = "white";
+            boxes[i + (currRow * 5)].style.backgroundColor = "grey";
+        }
+    }
+    currRow += 1;
+}
