@@ -22,6 +22,8 @@ body {
     width: 50px;
     background-color: white;
     border: 5px solid grey;
+    font-size: 45px;
+    text-align: center;
 }
 
 .copyright {
