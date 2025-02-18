@@ -8,6 +8,11 @@ body {
     align-items: center;
 }
 
+.warning {
+    padding: 10px;
+    display: none;
+}
+
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
