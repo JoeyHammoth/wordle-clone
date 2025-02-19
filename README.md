@@ -3,7 +3,7 @@
 <img src="https://github.com/JoeyHammoth/wordle-clone/blob/main/logo.png" alt="Logo" height=500px>
 
 Word Masters is a web-based word game inspired by the popular game Wordle. This project is a built based on the project instructions created by [Brian Holt](https://btholt.github.io/complete-intro-to-web-dev-v3/lessons/talking-to-servers/project) on Frontend Masters, 
-leveraging his API for word validation and fetching the word of the day.
+leveraging his API for word validation and fetching the word of the day. The final product can be found [here](https://joeyhammoth.github.io/wordle-clone/).
 
 ## Overview
 
