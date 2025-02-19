@@ -11,6 +11,7 @@ const boxes = document.querySelectorAll(".grid div");
 const warnText = document.querySelector(".warning");
 const loading = document.querySelector(".load");
 const checkbox = document.querySelector(".debug-mode");
+const titleText = document.querySelector(".title");
 
 function checkDebug() {
     if (checkbox.checked) {
@@ -179,6 +180,7 @@ async function correctingWord(word) {
     const processed = await promise.json();
     if (word.toLowerCase() == processed.word) {
         hasWon = true;
+        titleText.style.animation = "win 2s infinite linear";
         alert("Congratulations!!! You got it right!");
     } 
 
@@ -191,13 +193,23 @@ async function correctingWord(word) {
 function compareWord(answer, solution) {
     const answerArr = answer.split("");
     const solArr = solution.split("");
+    const solArrCpy = [...solArr];
     for (let i = 0; i < 5; i++) {
+        const index = solArrCpy.indexOf(answerArr[i]);
         if (answerArr[i] == solArr[i]) {
             boxes[i + (currRow * 5)].style.color = "white";
             boxes[i + (currRow * 5)].style.backgroundColor = "green";
-        } else if (solution.includes(answerArr[i])) {
+            if (index > -1) {
+                solArrCpy.splice(index, 1);
+            }
+            console.log(solArrCpy);
+        } else if (solArrCpy.includes(answerArr[i])) {
             boxes[i + (currRow * 5)].style.color = "white";
             boxes[i + (currRow * 5)].style.backgroundColor = "orange";
+            if (index > -1) {
+                solArrCpy.splice(index, 1);
+            }
+            console.log(solArrCpy);
         } else {
             boxes[i + (currRow * 5)].style.color = "white";
             boxes[i + (currRow * 5)].style.backgroundColor = "grey";

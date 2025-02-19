@@ -18,6 +18,25 @@
     }
 }
 
+@keyframes win {
+    100%, 
+    0% {
+        color: red;
+    }
+    20% {
+        color: orange;
+    }
+    40% {
+        color: yellow;
+    }
+    60% {
+        color: green;
+    }
+    80% {
+        color: violet;
+    }
+}
+
 body {
     display: flex;
     flex-direction: column;
